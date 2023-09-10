@@ -6,6 +6,8 @@ import helmet from "helmet";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
+import httpCode from "./constants/http.code.constant";
+import httpReason from "./constants/http.reason.constant";
 import { checkENV } from "./utils/environment.util";
 import { corsOptions } from "./config/cors.config";
 import { swaggerOptions } from "./config/swagger.config";
@@ -26,7 +28,9 @@ app.use(express.json());
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
-  res.status(500).send("Something broke!");
+  res
+    .status(httpCode.INTERNAL_SERVER_ERROR)
+    .send(httpReason.INTERNAL_SERVER_ERROR);
 });
 
 app.use("/", basePath);
@@ -41,7 +45,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-  res.status(404).send("Sorry can't find that!");
+  res.status(httpCode.NOT_FOUND).send(httpReason.NOT_FOUND);
 });
 
 app.listen(parseInt(process.env.PORT || "3000"), () => {
