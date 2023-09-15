@@ -5,7 +5,7 @@ function checkENV() {
 
   if (errors.length > 0) {
     console.error("Environment variables are not set ❌");
-    throw new Error(errors.join("\n"));
+    throw new Error(`\n${errors.join("\n")}`);
   }
 
   if (env.NODE_ENV !== "production") {
